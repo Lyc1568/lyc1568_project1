@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher_olenn)
-                        .setContentTitle("Nyan")
-                        .setContentText("Kto-to pelmen")
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setContentTitle("Title")
+                        .setContentText("Text")
                         .setSound(uri)
                         .setVibrate(new long[] {1000, 10000, 1000, 10000})
                         .setLights(Color.CYAN, 0, 1000);
