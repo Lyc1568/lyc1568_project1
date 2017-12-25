@@ -1,0 +1,22 @@
+public class MyClass {
+    public static void main(String args[]) {
+        
+        double Pi = 3.14159265359;
+        double x = 55.874546;
+        double y = 37.642770;
+        
+        boolean intersect;
+        
+        intersect = false;
+        int n = 10;
+        double[][] coord;
+        coord = new double[n][3];
+        
+        for (int i = 0; i < n; i++){
+            if (((x-coord[i][0])*(x-coord[i][0])+(y-coord[i][1])*(y-coord[i][1]))<=(coord[i][2]*coord[i][2])){
+                intersect = true;
+            }
+        }
+        
+    }
+}
