@@ -1,3 +1,5 @@
+//Sound notification
+
 package com.example.student.zlomeneezloe;
 
 import android.app.Notification;
