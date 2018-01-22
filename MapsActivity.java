@@ -2,21 +2,27 @@ package com.example.student.myapplication123;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapClickListener, OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private Marker marker;
+    private GoogleMap mMap;
+    public double[][] coord = new double[1000][3];
+    public int ind = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,44 +31,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
+        mMap.setOnMapClickListener(this);
         LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        marker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
-                .title("Hello world")
-                .draggable(true));
+    }
+
+    @Override
+    public void onMapClick(LatLng point) {
+        final EditText edit;
+        TextView view;
+        view = (TextView)  findViewById(R.id.textView);
+        edit = (EditText) findViewById(R.id.editText);
+        final int rad = Integer.parseInt(edit.getText().toString());
         CircleOptions circleOptions = new CircleOptions()
-                .center(new LatLng(10, 10))
-                .radius(100000)
+                .center(point)
+                .radius(rad)
                 .clickable(true);
-        Circle circle = googleMap.addCircle(circleOptions);
+        Circle circle = mMap.addCircle(circleOptions);
+        coord[ind][0] = point.latitude;
+        coord[ind][1] = point.longitude;
+        coord[ind][2] = rad;
+        ind++;
+        view.setText(String.valueOf(ind));
         mMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
 
             @Override
             public void onCircleClick(Circle circle) {
-                int strokeColor = circle.getStrokeColor() ^ 0x00ffffff;
-                circle.setStrokeColor(strokeColor);
-                circle.setCenter(new LatLng(9, 10));
+                circle.setRadius(rad);
             }
         });
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-            @Override
-            public void onMapClick(LatLng point) {
-                marker.setTitle(point.toString());
-            }
-        });
-
     }
 
-//    @Override
-//    public void onMapClick(LatLng point){
-
-//    }
-
+    public void Culick(View view) {
+        //make file
+    }
 }
