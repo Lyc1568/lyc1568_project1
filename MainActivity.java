@@ -1,69 +1,58 @@
-package com.example.student.coords;
+package com.example.student.myapplication;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.View;
 public class MainActivity extends AppCompatActivity {
-    final String LOG_TAG = "myLogs";
-    final String FILENAME = "MyFile123";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-}
 
-    public void onclick(View v) {
-                writeFile();
-                readFile();
+    public void onClick(View view) {
+        TextView res;
+        res = (TextView) findViewById(R.id.textView);
 
-    }
-
-    void writeFile() {
+        File myFile = new File(Environment.getExternalStorageDirectory().toString() + "/" + "coords.txt");
         try {
-            // отрываем поток для записи
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-                    openFileOutput(FILENAME, MODE_PRIVATE)));
-            // пишем данные
-            bw.write("It work's!!! Axaxaaaxaxaxaxaxaxaxa");
-            // закрываем поток
-            bw.close();
-            Log.d(LOG_TAG, "Файл записан");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            FileInputStream inputStream = new FileInputStream(myFile);
+            /*
+             * Буфферезируем данные из выходного потока файла
+             */
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            /*
+             * Класс для создания строк из последовательностей символов
+             */
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            try {
+                /*
+                 * Производим построчное считывание данных из файла в конструктор строки,
+                 * Псоле того, как данные закончились, производим вывод текста в TextView
+                 */
+                while ((line = bufferedReader.readLine()) != null){
+                    stringBuilder.append(line);
+                }
 
-    void readFile() {
-        try {
-            // открываем поток для чтения
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    openFileInput(FILENAME)));
-            String str = "";
-            // читаем содержимое
-            while ((str = br.readLine()) != null) {
-                Log.d(LOG_TAG, str);
+                res.setText(stringBuilder);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
+}
